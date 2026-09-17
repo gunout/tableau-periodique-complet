@@ -1,5 +1,24 @@
 # 🌌 Tableau Périodique Complet — Classification Historique & Spectrale
 
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![License MIT](https://img.shields.io/badge/License-MIT-002395?style=for-the-badge)
+![No Dependencies](https://img.shields.io/badge/Dependencies-0-ED2939?style=for-the-badge)
+![Responsive](https://img.shields.io/badge/Responsive-Yes-1D4ED8?style=for-the-badge)
+
+![Éléments](https://img.shields.io/badge/Éléments-118-002395?style=flat-square)
+![Époques](https://img.shields.io/badge/Époques-6-1D4ED8?style=flat-square)
+![Catégories](https://img.shields.io/badge/Catégories-10-3B82F6?style=flat-square)
+![Spectres](https://img.shields.io/badge/Spectres_simulés-Oui-ED2939?style=flat-square)
+![Langue](https://img.shields.io/badge/Langue-Français-C8102E?style=flat-square)
+![Statut](https://img.shields.io/badge/Statut-Stable-22c55e?style=flat-square)
+
+![Made with ❤️](https://img.shields.io/badge/Made_with-❤️-ED2939?style=flat-square)
+![France](https://img.shields.io/badge/Thème-🇫🇷_Bleu_Blanc_Rouge-002395?style=flat-square)
+
+---
+
 Dashboard interactif en **HTML / CSS / JavaScript** (fichier unique) présentant les **118 éléments chimiques** classés par date de découverte, avec une frise chronologique, une analyse spectrale simulée et un explorateur détaillé.
 
 Thème visuel : **bleu, blanc, rouge** 🇫🇷
@@ -22,6 +41,14 @@ Il permet d'explorer :
 
 ## ✨ Fonctionnalités
 
+![Periodic Table](https://img.shields.io/badge/🧪_Tableau_Périodique-Interactif-002395?style=flat-square)
+![Timeline](https://img.shields.io/badge/📅_Frise_Chronologique-SVG_natif-1D4ED8?style=flat-square)
+![Epochs](https://img.shields.io/badge/🏛️_Vue_par_Époque-6_périodes-3B82F6?style=flat-square)
+![Spectral](https://img.shields.io/badge/🌈_Analyse_Spectrale-3_onglets-ED2939?style=flat-square)
+![Explorer](https://img.shields.io/badge/🔍_Explorateur-118_fiches-C8102E?style=flat-square)
+![Filters](https://img.shields.io/badge/🎛️_Filtres-Dynamiques-22c55e?style=flat-square)
+![Responsive](https://img.shields.io/badge/📱_Responsive-Mobile_%26_Tablette-1D4ED8?style=flat-square)
+
 - 🧪 **Tableau périodique interactif** — 118 éléments colorés par catégorie chimique, avec info-bulles et clic vers l'explorateur.
 - 📅 **Frise chronologique** — Nuage de points « Année de découverte × Numéro atomique », coloré par époque.
 - 🏛️ **Vue par époque** — Cartes détaillées regroupées par période historique (Antiquité, Moyen-Âge, Renaissance, Révolution Chimique, Ère Spectroscopique, Période Moderne).
@@ -36,6 +63,10 @@ Il permet d'explorer :
 ## 🚀 Utilisation
 
 Aucune installation, aucun build, aucune dépendance.
+
+![No Install](https://img.shields.io/badge/Installation-Aucune-22c55e?style=for-the-badge)
+![No Build](https://img.shields.io/badge/Build-Aucun-22c55e?style=for-the-badge)
+![Single File](https://img.shields.io/badge/Fichier-Unique-1D4ED8?style=for-the-badge)
 
 1. Copiez le contenu du fichier HTML dans un fichier nommé `index.html`.
 2. Ouvrez ce fichier dans n'importe quel navigateur moderne (Chrome, Firefox, Edge, Safari).
@@ -54,6 +85,11 @@ xdg-open index.html    # Linux
 └── README.md       # Ce fichier
 
 Le fichier index.html contient :
+
+https://img.shields.io/badge/HTML-Structure-E34F26?style=flat-square&logo=html5&logoColor=white
+https://img.shields.io/badge/CSS-Th%C3%A8me_%F0%9F%87%AB%F0%9F%87%B7-1572B6?style=flat-square&logo=css3&logoColor=white
+https://img.shields.io/badge/JS-Donn%C3%A9es_%2B_Rendu-F7DF1E?style=flat-square&logo=javascript&logoColor=black
+https://img.shields.io/badge/SVG-Graphiques-FFB13B?style=flat-square&logo=svg&logoColor=black
 
     HTML : structure de la page (sidebar + contenu principal)
 
@@ -104,7 +140,7 @@ js
 {nom:'Antiquité', periode:'Avant 500', bg:'#EFF6FF', border:'#1D4ED8',
  color:'#1E3A8A', point:'#93C5FD', desc:"Éléments connus depuis l'antiquité"}
 
-Vous pouvez renommer, recolori­er ou réordonner les époques.
+Vous pouvez renommer, recolorier ou réordonner les époques.
 4. Modifier les couleurs des catégories
 
 Objet CAT_COLORS :
@@ -128,6 +164,10 @@ css
 
 📊 Données
 
+https://img.shields.io/badge/Source-Publique-1D4ED8?style=flat-square
+https://img.shields.io/badge/Usage-P%C3%A9dagogique-ED2939?style=flat-square
+https://img.shields.io/badge/Pr%C3%A9cision-Approch%C3%A9e-f59e0b?style=flat-square
+
 Les données historiques et spectrales sont compilées à titre pédagogique et peuvent contenir des approximations. Elles proviennent de sources publiques (Wikipédia, bases de données de spectroscopie, ouvrages de vulgarisation).
 
     Dates de découverte : les valeurs négatives indiquent une connaissance antique (ex. -25000 pour le carbone).
@@ -135,14 +175,16 @@ Les données historiques et spectrales sont compilées à titre pédagogique et 
     Spectres : les longueurs d'onde sont des valeurs caractéristiques simplifiées. Les spectres affichés sont simulés (gaussiennes centrées sur les raies) et non des spectres expérimentaux bruts.
 
 🌐 Compatibilité
-Navigateur	Version minimale
-Chrome	80+
-Firefox	78+
-Edge	80+
-Safari	14+
+Navigateur	Version minimale	Statut
+https://img.shields.io/badge/Chrome-80+-4285F4?style=flat-square&logo=googlechrome&logoColor=white	80+	https://img.shields.io/badge/-OK-22c55e?style=flat-square
+https://img.shields.io/badge/Firefox-78+-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white	78+	https://img.shields.io/badge/-OK-22c55e?style=flat-square
+https://img.shields.io/badge/Edge-80+-0078D7?style=flat-square&logo=microsoftedge&logoColor=white	80+	https://img.shields.io/badge/-OK-22c55e?style=flat-square
+https://img.shields.io/badge/Safari-14+-000000?style=flat-square&logo=safari&logoColor=white	14+	https://img.shields.io/badge/-OK-22c55e?style=flat-square
 
 Aucune librairie externe n'est requise (pas de React, Vue, D3, Plotly…). Tout est en JavaScript natif et SVG.
 📄 Licence
+
+https://img.shields.io/badge/License-MIT-002395?style=for-the-badge
 
 Ce projet est distribué sous licence MIT.
 
@@ -172,6 +214,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 🙏 Crédits
+
+https://img.shields.io/badge/Inspiration-Streamlit_Dashboard-FF4B4B?style=flat-square&logo=streamlit&logoColor=white
+https://img.shields.io/badge/Donn%C3%A9es-Wikip%C3%A9dia_%26_Bases_publiques-1D4ED8?style=flat-square
+https://img.shields.io/badge/Th%C3%A8me-%F0%9F%87%AB%F0%9F%87%B7_Bleu_Blanc_Rouge-002395?style=flat-square
 
     Données historiques et spectrales compilées à partir de sources publiques.
 
