@@ -1,5 +1,8 @@
 # 🌌 Tableau Périodique Complet — Classification Historique & Spectrale
 
+[![GitHub](https://img.shields.io/badge/GitHub-gunout%2Ftableau--periodique--complet-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/gunout/tableau-periodique-complet)
+[![Déployé](https://img.shields.io/badge/Déployé-En_ligne-002395?style=for-the-badge&logo=netlify&logoColor=white)](https://VOTRE-URL-DE-DEPLOIEMENT)
+
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -22,6 +25,9 @@
 Dashboard interactif en **HTML / CSS / JavaScript** (fichier unique) présentant les **118 éléments chimiques** classés par date de découverte, avec une frise chronologique, une analyse spectrale simulée et un explorateur détaillé.
 
 Thème visuel : **bleu, blanc, rouge** 🇫🇷
+
+> 🔗 **Dépôt GitHub** : [github.com/gunout/tableau-periodique-complet](https://github.com/gunout/tableau-periodique-complet)
+> 🚀 **Démo en ligne** : [VOTRE-URL-DE-DEPLOIEMENT](https://VOTRE-URL-DE-DEPLOIEMENT)
 
 ---
 
@@ -68,16 +74,40 @@ Aucune installation, aucun build, aucune dépendance.
 ![No Build](https://img.shields.io/badge/Build-Aucun-22c55e?style=for-the-badge)
 ![Single File](https://img.shields.io/badge/Fichier-Unique-1D4ED8?style=for-the-badge)
 
-1. Copiez le contenu du fichier HTML dans un fichier nommé `index.html`.
-2. Ouvrez ce fichier dans n'importe quel navigateur moderne (Chrome, Firefox, Edge, Safari).
-3. C'est tout ! 🎉
+### Option 1 — En ligne (recommandé)
 
-```bash
-# Exemple : ouvrir directement depuis le terminal
-open index.html        # macOS
-start index.html       # Windows
-xdg-open index.html    # Linux
-```
+Accédez directement à la démo déployée :
+
+👉 **[VOTRE-URL-DE-DEPLOIEMENT](https://VOTRE-URL-DE-DEPLOIEMENT)**
+
+### Option 2 — En local
+
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/gunout/tableau-periodique-complet.git
+   cd tableau-periodique-complet
+   ```
+2. Ouvrez le fichier `index.html` dans votre navigateur :
+   ```bash
+   open index.html        # macOS
+   start index.html       # Windows
+   xdg-open index.html    # Linux
+   ```
+
+---
+
+## 🌐 Déploiement
+
+Ce projet est déployé en ligne et accessible publiquement.
+
+[![Déployé](https://img.shields.io/badge/Statut-En_ligne-22c55e?style=for-the-badge)]()
+[![URL](https://img.shields.io/badge/URL-VOTRE--URL--DE--DEPLOIEMENT-002395?style=for-the-badge)](https://VOTRE-URL-DE-DEPLOIEMENT)
+
+| Plateforme | Statut | URL |
+|------------|--------|-----|
+| Netlify / Vercel / GitHub Pages | ✅ En ligne | [VOTRE-URL-DE-DEPLOIEMENT](https://VOTRE-URL-DE-DEPLOIEMENT) |
+
+> 💡 Pour redéployer vous-même : le projet étant un simple fichier statique, il suffit de glisser-déposer le dossier sur [Netlify Drop](https://app.netlify.com/drop) ou de connecter le dépôt GitHub à Netlify/Vercel.
 
 ---
 
@@ -268,4 +298,5 @@ SOFTWARE.
 
 **Bon exploration !** 🧪🌈
 
-![Star](https://img.shields.io/badge/⭐_N'oubliez_pas_de_star_le_projet-ED2939?style=for-the-badge)
+[![GitHub](https://img.shields.io/badge/Voir_sur-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/gunout/tableau-periodique-complet)
+[![Démo](https://img.shields.io/badge/Voir_la-Démo-002395?style=for-the-badge&logo=netlify&logoColor=white)](https://VOTRE-URL-DE-DEPLOIEMENT)
