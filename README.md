@@ -293,7 +293,7 @@ SOFTWARE.
 **Bon exploration !** 🧪🌈
 
 [![GitHub](https://img.shields.io/badge/Voir_sur-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/gunout/tableau-periodique-complet)
-[![Démo](https://img.shields.io/badge/Voir_la-Démo-002395?style=for-the-badge&logo=netlify&logoColor=white)](https://VOTRE-URL-DE-DEPLOIEMENT)
+[![Démo](https://img.shields.io/badge/Voir_la-Démo-002395?style=for-the-badge&logo=netlify&logoColor=white)](https://gunout.github.io/tableau-periodique-complet)
 
 ---
 
