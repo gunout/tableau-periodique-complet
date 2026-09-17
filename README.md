@@ -27,7 +27,7 @@ Dashboard interactif en **HTML / CSS / JavaScript** (fichier unique) présentant
 Thème visuel : **bleu, blanc, rouge** 🇫🇷
 
 > 🔗 **Dépôt GitHub** : [github.com/gunout/tableau-periodique-complet](https://github.com/gunout/tableau-periodique-complet)
-> 🚀 **Démo en ligne** : [VOTRE-URL-DE-DEPLOIEMENT](https://gunout.github.io/tableau-periodique-complet)
+> 🚀 **Démo en ligne** : [gunout.github.io/taleau-periodique-complet](https://gunout.github.io/tableau-periodique-complet)
 
 ---
 
