@@ -284,15 +284,9 @@ SOFTWARE.
 
 ## 🌟 Aperçu
 
-```text
-┌──────────────────────────────────────────────────────────────┐
-│  🌌 Tableau Périodique Complet                               │
-│  ──────────────────────────────────────────────────────────  │
-│  🧪 118 éléments   📅 6 époques   🌈 Spectres   🔍 Explorer  │
-│                                                              │
-│  🇫🇷 Bleu • Blanc • Rouge — Thème tricolore                 │
-└──────────────────────────────────────────────────────────────┘
-```
+<img width="1800" height="4855" alt="Screenshot 2026-09-17 at 23-15-50 🌌 Tableau Périodique Complet — Classification Historique   Spectrale" src="https://github.com/user-attachments/assets/b6bccb93-81c7-44e6-a88a-e85eff644bef" />
+
+
 
 ---
 
