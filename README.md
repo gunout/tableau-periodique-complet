@@ -78,7 +78,7 @@ Aucune installation, aucun build, aucune dépendance.
 
 Accédez directement à la démo déployée :
 
-👉 **[VOTRE-URL-DE-DEPLOIEMENT](https://VOTRE-URL-DE-DEPLOIEMENT)**
+👉 **[TABLEAU PERIODIQUE COMPLET](https://gunout.github.io/tableau-periodique-complet)**
 
 ### Option 2 — En local
 
