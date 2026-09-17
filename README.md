@@ -1,7 +1,7 @@
 # 🌌 Tableau Périodique Complet — Classification Historique & Spectrale
 
 [![GitHub](https://img.shields.io/badge/GitHub-gunout%2Ftableau--periodique--complet-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/gunout/tableau-periodique-complet)
-[![Déployé](https://img.shields.io/badge/Déployé-En_ligne-002395?style=for-the-badge&logo=netlify&logoColor=white)](https://VOTRE-URL-DE-DEPLOIEMENT)
+[![Déployé](https://img.shields.io/badge/Déployé-En_ligne-002395?style=for-the-badge&logo=netlify&logoColor=white)](https://gunout.github.io/tableau-periodique-complet)
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
