@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🌌 Tableau Périodique Complet — Classification Historique & Spectrale</title>
+<style>
+:root{
+  --bleu:#002395;
+  --bleu-clair:#1D4ED8;
+  --bleu-moyen:#3B82F6;
+  --bleu-pale:#DBEAFE;
+  --bleu-tres-pale:#EFF6FF;
+  --rouge:#ED2939;
+  --rouge-fonce:#C8102E;
+  --blanc:#ffffff;
+  --bg:#f7fafd;
+  --panel:#ffffff;
+  --border:#dbe6f3;
+  --text:#0f172a;
+  --muted:#64748b;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:15px;
+  padding-top:6px;
+}
+
+/* ===== Bande tricolore ===== */
+.tricolore{
+  position:fixed;top:0;left:0;right:0;height:6px;z-index:100;display:flex;
+  box-shadow:0 1px 4px rgba(0,0,0,.15);
+}
+.tricolore i{flex:1;}
+.tricolore i:nth-child(1){background:#002395;}
+.tricolore i:nth-child(2){background:#ffffff;}
+.tricolore i:nth-child(3){background:#ED2939;}
+
+.app{display:flex;min-height:100vh;align-items:flex-start;}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+  width:300px;flex:0 0 300px;
+  background:linear-gradient(180deg,#f0f6ff 0%,#e6f0fc 100%);
+  border-right:1px solid var(--border);
+  padding:24px 16px 40px;
+  height:100vh;
+  position:sticky;top:0;
+  overflow-y:auto;
+}
+.sidebar h2{
+  font-size:1rem;margin:0 0 16px;color:var(--bleu);
+  letter-spacing:.3px;font-weight:800;
+  display:flex;align-items:center;gap:8px;
+}
+.sidebar h2::before{
+  content:'';width:6px;height:20px;border-radius:3px;
+  background:linear-gradient(180deg,var(--bleu),var(--rouge));
+}
+.sidebar h3{
+  font-size:.73rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--bleu-clair);margin:22px 0 9px;font-weight:800;
+  border-bottom:1px dashed #c7d9ee;padding-bottom:6px;
+}
+.nav{display:flex;flex-direction:column;gap:5px;}
+.nav-btn{
+  text-align:left;padding:10px 13px;border-radius:9px;border:1px solid transparent;
+  background:transparent;color:#334155;font-size:.87rem;cursor:pointer;
+  transition:.18s;font-family:inherit;font-weight:500;
+}
+.nav-btn:hover{background:#dce9fa;color:var(--bleu);}
+.nav-btn.active{
+  background:linear-gradient(90deg,var(--bleu),var(--bleu-clair));
+  color:#fff;font-weight:700;
+  box-shadow:0 4px 12px rgba(0,35,149,.3);
+}
+.filter-list{display:flex;flex-direction:column;gap:5px;max-height:240px;overflow-y:auto;padding-right:4px;}
+.filter-item{
+  display:flex;align-items:center;gap:9px;font-size:.8rem;cursor:pointer;
+  padding:5px 7px;border-radius:7px;color:#334155;transition:.15s;
+}
+.filter-item:hover{background:#dce9fa;}
+.filter-item input{accent-color:var(--bleu-clair);cursor:pointer;width:14px;height:14px;}
+.swatch{width:12px;height:12px;border-radius:3px;flex:0 0 12px;border:1px solid rgba(0,0,0,.18);}
+.opt-row{display:flex;align-items:center;gap:9px;font-size:.81rem;margin:7px 0;color:#334155;cursor:pointer;}
+.opt-row input{accent-color:var(--rouge);cursor:pointer;width:14px;height:14px;}
+
+/* ================= MAIN ================= */
+.main{flex:1;min-width:0;padding:28px 34px 70px;}
+.main-header{
+  font-size:2.2rem;font-weight:900;text-align:center;line-height:1.18;
+  background:linear-gradient(90deg,#002395 0%,#1D4ED8 45%,#ED2939 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  margin:0 0 .7rem;letter-spacing:-.5px;
+}
+.sub-header{
+  text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:28px;
+  line-height:1.6;max-width:820px;margin-left:auto;margin-right:auto;
+}
+.sub-header strong{color:var(--bleu);}
+.section-header{
+  color:var(--bleu);font-size:1.02rem;font-weight:800;letter-spacing:.02em;
+  border-bottom:3px solid transparent;
+  border-image:linear-gradient(90deg,var(--bleu),var(--bleu-moyen),var(--rouge)) 1;
+  padding-bottom:.5rem;margin:36px 0 18px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-header:first-of-type{margin-top:8px;}
+
+/* ================= TABLEAU PÉRIODIQUE ================= */
+.ptable-wrap{overflow-x:auto;padding-bottom:14px;}
+.ptable{
+  display:grid;
+  grid-template-columns:repeat(18,minmax(54px,1fr));
+  gap:5px;
+  min-width:1040px;
+}
+.pcell{
+  aspect-ratio:1/1;border-radius:8px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:.7rem;line-height:1.05;position:relative;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,opacity .25s;
+  user-select:none;cursor:pointer;
+  border:1px solid rgba(255,255,255,.45);
+}
+.pcell strong{font-size:.9rem;font-weight:800;letter-spacing:-.3px;}
+.pcell span{font-size:.6rem;opacity:.85;font-weight:600;}
+.pcell.empty{background:transparent;border:none;cursor:default;}
+.pcell.label{
+  font-size:.6rem;font-weight:800;color:var(--bleu);
+  white-space:nowrap;overflow:visible;background:transparent;border:none;
+  justify-content:center;align-items:flex-end;cursor:default;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.pcell:not(.empty):not(.label):hover{
+  transform:scale(1.16) translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,35,149,.35);z-index:10;
+}
+.pcell.dimmed{opacity:.13;filter:grayscale(.55);}
+
+.legend{
+  display:flex;flex-wrap:wrap;gap:12px 18px;margin:14px 0 20px;
+  font-size:.76rem;color:#334155;
+  background:#fff;border:1px solid var(--border);border-radius:11px;
+  padding:12px 16px;
+}
+.legend span{display:flex;align-items:center;gap:7px;font-weight:500;}
+.legend .dot{width:13px;height:13px;border-radius:4px;border:1px solid rgba(0,0,0,.1);}
+
+/* ================= CARTES ÉPOQUES ================= */
+.epoch-banner{
+  border-radius:12px;padding:14px 20px;margin:24px 0 14px;
+  border-left:6px solid #999;display:flex;align-items:center;gap:16px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.epoch-banner h3{margin:0 0 3px;font-size:1rem;font-weight:800;}
+.epoch-banner p{margin:0;font-size:.78rem;opacity:.88;}
+
+.cards-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:11px;margin-bottom:8px;
+}
+.discovery-card{
+  background:#fff;border:1px solid var(--border);border-radius:11px;
+  padding:12px 9px;text-align:center;color:#1e293b;
+  box-shadow:0 1px 3px rgba(0,35,149,.05);transition:.22s;
+}
+.discovery-card:hover{
+  box-shadow:0 8px 20px rgba(0,35,149,.14);
+  transform:translateY(-3px);border-color:var(--bleu-moyen);
+}
+.discovery-card h4{margin:0 0 6px;font-size:1.15rem;color:var(--bleu);font-weight:800;}
+.discovery-card .nm{font-weight:700;font-size:.82rem;display:block;margin-bottom:4px;}
+.discovery-card small{display:block;font-size:.69rem;color:var(--muted);line-height:1.45;}
+.rgb-spectrum{height:14px;border-radius:7px;margin:8px 0;border:1px solid rgba(0,0,0,.1);}
+
+/* ================= TABS ================= */
+.tabs{
+  display:flex;gap:6px;border-bottom:2px solid var(--border);
+  margin-bottom:20px;flex-wrap:wrap;
+}
+.tab{
+  padding:9px 18px;border:none;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:.85rem;color:var(--muted);
+  border-radius:9px 9px 0 0;transition:.18s;font-weight:600;
+}
+.tab:hover{background:var(--bleu-tres-pale);color:var(--bleu);}
+.tab.active{
+  background:linear-gradient(180deg,#fff,#f0f6ff);
+  color:var(--bleu);font-weight:800;
+  box-shadow:0 -3px 0 var(--rouge) inset;
+}
+
+/* ================= CHIPS ================= */
+.chip-row{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+  gap:10px;margin-bottom:14px;
+}
+.chip{
+  border-radius:10px;padding:9px 7px;text-align:center;font-size:.74rem;
+  border:1px solid rgba(0,0,0,.07);background:#fff;transition:.2s;
+}
+.chip:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,35,149,.15);}
+.chip strong{display:block;font-size:.98rem;font-weight:800;}
+.chip .bar{height:12px;border-radius:6px;margin:6px 0;border:1px solid rgba(0,0,0,.08);}
+.sub-title{font-weight:800;color:var(--bleu);margin:20px 0 10px;font-size:.93rem;}
+
+/* ================= FORMULAIRES ================= */
+select,input[type=text]{
+  font-family:inherit;font-size:.87rem;padding:9px 12px;border-radius:9px;
+  border:1px solid var(--border);background:#fff;color:var(--text);outline:none;
+  transition:.18s;
+}
+select:focus{border-color:var(--bleu-moyen);box-shadow:0 0 0 3px rgba(59,130,246,.18);}
+select[multiple]{padding:5px;min-width:230px;min-height:180px;}
+select[multiple] option{padding:5px 9px;border-radius:5px;margin-bottom:2px;}
+select[multiple] option:checked{background:linear-gradient(90deg,var(--bleu),var(--bleu-clair));color:#fff;}
+
+/* ================= EXPLORATEUR ================= */
+.explorer-top{
+  border-radius:16px;padding:26px;text-align:center;margin-bottom:20px;
+  border:2px solid var(--bleu-moyen);
+  background:linear-gradient(135deg,#f0f6ff,#fff);
+  box-shadow:0 4px 18px rgba(0,35,149,.08);
+}
+.explorer-circle{
+  width:112px;height:112px;border-radius:50%;margin:16px auto;
+  border:4px solid #fff;box-shadow:0 8px 22px rgba(0,35,149,.28);
+}
+.info-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:15px;
+}
+.info-card{
+  background:#fff;border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;box-shadow:0 1px 4px rgba(0,35,149,.05);
+  border-top:3px solid var(--bleu-moyen);
+}
+.info-card h4{
+  margin:0 0 12px;color:var(--bleu);font-size:.85rem;
+  letter-spacing:.04em;text-transform:uppercase;font-weight:800;
+}
+.info-card p{margin:5px 0;font-size:.82rem;line-height:1.55;}
+.info-card strong{color:#334155;font-weight:700;}
+
+/* ================= DIVERS ================= */
+.footer{
+  margin-top:50px;text-align:center;color:var(--muted);font-size:.78rem;
+  line-height:1.8;border-top:2px solid transparent;
+  border-image:linear-gradient(90deg,var(--bleu),#fff,var(--rouge)) 1;
+  padding-top:20px;
+}
+.chart-box{
+  background:#fff;border:1px solid var(--border);border-radius:13px;
+  padding:16px;box-shadow:0 1px 5px rgba(0,35,149,.05);
+  margin-bottom:18px;overflow-x:auto;
+}
+.chart-box svg{display:block;width:100%;height:auto;min-width:520px;}
+details{margin:10px 0 20px;}
+details summary{
+  cursor:pointer;color:var(--bleu-clair);font-size:.81rem;font-weight:700;
+  padding:7px 0;outline:none;transition:.15s;
+}
+details summary:hover{color:var(--rouge);}
+.empty-msg{color:var(--muted);font-style:italic;font-size:.85rem;padding:12px 0;text-align:center;}
+
+@media (max-width:900px){
+  .app{flex-direction:column;}
+  .sidebar{width:100%;flex:1 1 auto;height:auto;position:relative;border-right:none;border-bottom:1px solid var(--border);}
+  .main{padding:20px 16px 60px;}
+  .main-header{font-size:1.45rem;}
+  .ptable{grid-template-columns:repeat(18,minmax(44px,1fr));min-width:840px;}
+  .pcell strong{font-size:.78rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="tricolore"><i></i><i></i><i></i></div>
+
+<!-- Dégradé du spectre visible (défini une seule fois, réutilisé par tous les SVG) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="visibleSpectrum" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#7B00FF"/>
+      <stop offset="12%"  stop-color="#3F00FF"/>
+      <stop offset="25%"  stop-color="#0055FF"/>
+      <stop offset="37%"  stop-color="#00CCFF"/>
+      <stop offset="50%"  stop-color="#00FF55"/>
+      <stop offset="62%"  stop-color="#CCFF00"/>
+      <stop offset="75%"  stop-color="#FF9900"/>
+      <stop offset="88%"  stop-color="#FF3300"/>
+      <stop offset="100%" stop-color="#CC0000"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main" id="mainContent"></main>
+</div>
+
+<script>
+/* =========================================================================
+   1. DONNÉES
+   ========================================================================= */
+const ELEMENTS = [
+/* P1 */ {s:'H',n:'Hydrogène',Z:1,m:1.008,cfg:'1s¹',p:1,g:1,cat:'Non-metal',date:1766,dec:'Henry Cavendish',ep:'Révolution Chimique'},
+{s:'He',n:'Hélium',Z:2,m:4.0026,cfg:'1s²',p:1,g:18,cat:'Gaz noble',date:1868,dec:'Pierre Janssen',ep:'Ère Spectroscopique'},
+/* P2 */ {s:'Li',n:'Lithium',Z:3,m:6.94,cfg:'[He] 2s¹',p:2,g:1,cat:'Métal alcalin',date:1817,dec:'Johan Arfwedson',ep:'Ère Spectroscopique'},
+{s:'Be',n:'Béryllium',Z:4,m:9.0122,cfg:'[He] 2s²',p:2,g:2,cat:'Métal alcalino-terreux',date:1798,dec:'Louis Vauquelin',ep:'Révolution Chimique'},
+{s:'B',n:'Bore',Z:5,m:10.81,cfg:'[He] 2s² 2p¹',p:2,g:13,cat:'Métalloïde',date:1808,dec:'Joseph Gay-Lussac',ep:'Ère Spectroscopique'},
+{s:'C',n:'Carbone',Z:6,m:12.011,cfg:'[He] 2s² 2p²',p:2,g:14,cat:'Non-metal',date:-25000,dec:'Préhistoire',ep:'Antiquité'},
+{s:'N',n:'Azote',Z:7,m:14.007,cfg:'[He] 2s² 2p³',p:2,g:15,cat:'Non-metal',date:1772,dec:'Daniel Rutherford',ep:'Révolution Chimique'},
+{s:'O',n:'Oxygène',Z:8,m:15.999,cfg:'[He] 2s² 2p⁴',p:2,g:16,cat:'Non-metal',date:1774,dec:'Joseph Priestley',ep:'Révolution Chimique'},
+{s:'F',n:'Fluor',Z:9,m:18.998,cfg:'[He] 2s² 2p⁵',p:2,g:17,cat:'Halogène',date:1886,dec:'Henri Moissan',ep:'Ère Spectroscopique'},
+{s:'Ne',n:'Néon',Z:10,m:20.18,cfg:'[He] 2s² 2p⁶',p:2,g:18,cat:'Gaz noble',date:1898,dec:'William Ramsay',ep:'Ère Spectroscopique'},
+/* P3 */ {s:'Na',n:'Sodium',Z:11,m:22.99,cfg:'[Ne] 3s¹',p:3,g:1,cat:'Métal alcalin',date:1807,dec:'Humphry Davy',ep:'Ère Spectroscopique'},
+{s:'Mg',n:'Magnésium',Z:12,m:24.305,cfg:'[Ne] 3s²',p:3,g:2,cat:'Métal alcalino-terreux',date:1808,dec:'Humphry Davy',ep:'Ère Spectroscopique'},
+{s:'Al',n:'Aluminium',Z:13,m:26.982,cfg:'[Ne] 3s² 3p¹',p:3,g:13,cat:'Métal pauvre',date:1825,dec:'Hans Christian Ørsted',ep:'Ère Spectroscopique'},
+{s:'Si',n:'Silicium',Z:14,m:28.085,cfg:'[Ne] 3s² 3p²',p:3,g:14,cat:'Métalloïde',date:1824,dec:'Jöns Berzelius',ep:'Ère Spectroscopique'},
+{s:'P',n:'Phosphore',Z:15,m:30.974,cfg:'[Ne] 3s² 3p³',p:3,g:15,cat:'Non-metal',date:1669,dec:'Hennig Brand',ep:'Renaissance'},
+{s:'S',n:'Soufre',Z:16,m:32.06,cfg:'[Ne] 3s² 3p⁴',p:3,g:16,cat:'Non-metal',date:-2000,dec:'Chinois anciens',ep:'Antiquité'},
+{s:'Cl',n:'Chlore',Z:17,m:35.45,cfg:'[Ne] 3s² 3p⁵',p:3,g:17,cat:'Halogène',date:1774,dec:'Carl Scheele',ep:'Révolution Chimique'},
+{s:'Ar',n:'Argon',Z:18,m:39.948,cfg:'[Ne] 3s² 3p⁶',p:3,g:18,cat:'Gaz noble',date:1894,dec:'Lord Rayleigh',ep:'Ère Spectroscopique'},
+/* P4 */ {s:'K',n:'Potassium',Z:19,m:39.098,cfg:'[Ar] 4s¹',p:4,g:1,cat:'Métal alcalin',date:1807,dec:'Humphry Davy',ep:'Ère Spectroscopique'},
+{s:'Ca',n:'Calcium',Z:20,m:40.078,cfg:'[Ar] 4s²',p:4,g:2,cat:'Métal alcalino-terreux',date:1808,dec:'Humphry Davy',ep:'Ère Spectroscopique'},
+{s:'Sc',n:'Scandium',Z:21,m:44.956,cfg:'[Ar] 3d¹ 4s²',p:4,g:3,cat:'Métal de transition',date:1879,dec:'Lars Nilson',ep:'Ère Spectroscopique'},
+{s:'Ti',n:'Titane',Z:22,m:47.867,cfg:'[Ar] 3d² 4s²',p:4,g:4,cat:'Métal de transition',date:1791,dec:'William Gregor',ep:'Révolution Chimique'},
+{s:'V',n:'Vanadium',Z:23,m:50.942,cfg:'[Ar] 3d³ 4s²',p:4,g:5,cat:'Métal de transition',date:1801,dec:'Andrés Manuel',ep:'Ère Spectroscopique'},
+{s:'Cr',n:'Chrome',Z:24,m:51.996,cfg:'[Ar] 3d⁵ 4s¹',p:4,g:6,cat:'Métal de transition',date:1797,dec:'Louis Vauquelin',ep:'Révolution Chimique'},
+{s:'Mn',n:'Manganèse',Z:25,m:54.938,cfg:'[Ar] 3d⁵ 4s²',p:4,g:7,cat:'Métal de transition',date:1774,dec:'Johan Gahn',ep:'Révolution Chimique'},
+{s:'Fe',n:'Fer',Z:26,m:55.845,cfg:'[Ar] 3d⁶ 4s²',p:4,g:8,cat:'Métal de transition',date:-1500,dec:'Hittites',ep:'Antiquité'},
+{s:'Co',n:'Cobalt',Z:27,m:58.933,cfg:'[Ar] 3d⁷ 4s²',p:4,g:9,cat:'Métal de transition',date:1735,dec:'Georg Brandt',ep:'Renaissance'},
+{s:'Ni',n:'Nickel',Z:28,m:58.693,cfg:'[Ar] 3d⁸ 4s²',p:4,g:10,cat:'Métal de transition',date:1751,dec:'Axel Cronstedt',ep:'Renaissance'},
+{s:'Cu',n:'Cuivre',Z:29,m:63.546,cfg:'[Ar] 3d¹⁰ 4s¹',p:4,g:11,cat:'Métal de transition',date:-9000,dec:'Moyen-Orient',ep:'Antiquité'},
+{s:'Zn',n:'Zinc',Z:30,m:65.38,cfg:'[Ar] 3d¹⁰ 4s²',p:4,g:12,cat:'Métal de transition',date:1000,dec:'Indiens',ep:'Moyen-Âge'},
+{s:'Ga',n:'Gallium',Z:31,m:69.723,cfg:'[Ar] 3d¹⁰ 4s² 4p¹',p:4,g:13,cat:'Métal pauvre',date:1875,dec:'Paul Lecoq',ep:'Ère Spectroscopique'},
+{s:'Ge',n:'Germanium',Z:32,m:72.63,cfg:'[Ar] 3d¹⁰ 4s² 4p²',p:4,g:14,cat:'Métalloïde',date:1886,dec:'Clemens Winkler',ep:'Ère Spectroscopique'},
+{s:'As',n:'Arsenic',Z:33,m:74.922,cfg:'[Ar] 3d¹⁰ 4s² 4p³',p:4,g:15,cat:'Métalloïde',date:1250,dec:'Albert le Grand',ep:'Moyen-Âge'},
+{s:'Se',n:'Sélénium',Z:34,m:78.971,cfg:'[Ar] 3d¹⁰ 4s² 4p⁴',p:4,g:16,cat:'Non-metal',date:1817,dec:'Jöns Berzelius',ep:'Ère Spectroscopique'},
+{s:'Br',n:'Brome',Z:35,m:79.904,cfg:'[Ar] 3d¹⁰ 4s² 4p⁵',p:4,g:17,cat:'Halogène',date:1826,dec:'Antoine Balard',ep:'Ère Spectroscopique'},
+{s:'Kr',n:'Krypton',Z:36,m:83.798,cfg:'[Ar] 3d¹⁰ 4s² 4p⁶',p:4,g:18,cat:'Gaz noble',date:1898,dec:'William Ramsay',ep:'Ère Spectroscopique'},
+/* P5 */ {s:'Rb',n:'Rubidium',Z:37,m:85.468,cfg:'[Kr] 5s¹',p:5,g:1,cat:'Métal alcalin',date:1861,dec:'Robert Bunsen',ep:'Ère Spectroscopique'},
+{s:'Sr',n:'Strontium',Z:38,m:87.62,cfg:'[Kr] 5s²',p:5,g:2,cat:'Métal alcalino-terreux',date:1790,dec:'Adair Crawford',ep:'Ère Spectroscopique'},
+{s:'Y',n:'Yttrium',Z:39,m:88.906,cfg:'[Kr] 4d¹ 5s²',p:5,g:3,cat:'Métal de transition',date:1794,dec:'Johan Gadolin',ep:'Révolution Chimique'},
+{s:'Zr',n:'Zirconium',Z:40,m:91.224,cfg:'[Kr] 4d² 5s²',p:5,g:4,cat:'Métal de transition',date:1789,dec:'Martin Klaproth',ep:'Révolution Chimique'},
+{s:'Nb',n:'Niobium',Z:41,m:92.906,cfg:'[Kr] 4d⁴ 5s¹',p:5,g:5,cat:'Métal de transition',date:1801,dec:'Charles Hatchett',ep:'Ère Spectroscopique'},
+{s:'Mo',n:'Molybdène',Z:42,m:95.95,cfg:'[Kr] 4d⁵ 5s¹',p:5,g:6,cat:'Métal de transition',date:1778,dec:'Carl Scheele',ep:'Révolution Chimique'},
+{s:'Tc',n:'Technétium',Z:43,m:98.0,cfg:'[Kr] 4d⁵ 5s²',p:5,g:7,cat:'Métal de transition',date:1937,dec:'Carlo Perrier',ep:'Période Moderne'},
+{s:'Ru',n:'Ruthénium',Z:44,m:101.07,cfg:'[Kr] 4d⁷ 5s¹',p:5,g:8,cat:'Métal de transition',date:1844,dec:'Karl Claus',ep:'Ère Spectroscopique'},
+{s:'Rh',n:'Rhodium',Z:45,m:102.91,cfg:'[Kr] 4d⁸ 5s¹',p:5,g:9,cat:'Métal de transition',date:1803,dec:'William Wollaston',ep:'Ère Spectroscopique'},
+{s:'Pd',n:'Palladium',Z:46,m:106.42,cfg:'[Kr] 4d¹⁰',p:5,g:10,cat:'Métal de transition',date:1803,dec:'William Wollaston',ep:'Ère Spectroscopique'},
+{s:'Ag',n:'Argent',Z:47,m:107.87,cfg:'[Kr] 4d¹⁰ 5s¹',p:5,g:11,cat:'Métal de transition',date:-3000,dec:'Mésopotamiens',ep:'Antiquité'},
+{s:'Cd',n:'Cadmium',Z:48,m:112.41,cfg:'[Kr] 4d¹⁰ 5s²',p:5,g:12,cat:'Métal de transition',date:1817,dec:'Friedrich Stromeyer',ep:'Ère Spectroscopique'},
+{s:'In',n:'Indium',Z:49,m:114.82,cfg:'[Kr] 4d¹⁰ 5s² 5p¹',p:5,g:13,cat:'Métal pauvre',date:1863,dec:'Ferdinand Reich',ep:'Ère Spectroscopique'},
+{s:'Sn',n:'Étain',Z:50,m:118.71,cfg:'[Kr] 4d¹⁰ 5s² 5p²',p:5,g:14,cat:'Métal pauvre',date:-2000,dec:'Civilisations anciennes',ep:'Antiquité'},
+{s:'Sb',n:'Antimoine',Z:51,m:121.76,cfg:'[Kr] 4d¹⁰ 5s² 5p³',p:5,g:15,cat:'Métalloïde',date:800,dec:'Jâbir ibn Hayyân',ep:'Moyen-Âge'},
+{s:'Te',n:'Tellure',Z:52,m:127.6,cfg:'[Kr] 4d¹⁰ 5s² 5p⁴',p:5,g:16,cat:'Métalloïde',date:1782,dec:'Franz Müller',ep:'Révolution Chimique'},
+{s:'I',n:'Iode',Z:53,m:126.9,cfg:'[Kr] 4d¹⁰ 5s² 5p⁵',p:5,g:17,cat:'Halogène',date:1811,dec:'Bernard Courtois',ep:'Ère Spectroscopique'},
+{s:'Xe',n:'Xénon',Z:54,m:131.29,cfg:'[Kr] 4d¹⁰ 5s² 5p⁶',p:5,g:18,cat:'Gaz noble',date:1898,dec:'William Ramsay',ep:'Ère Spectroscopique'},
+/* P6 */ {s:'Cs',n:'Césium',Z:55,m:132.91,cfg:'[Xe] 6s¹',p:6,g:1,cat:'Métal alcalin',date:1860,dec:'Robert Bunsen',ep:'Ère Spectroscopique'},
+{s:'Ba',n:'Baryum',Z:56,m:137.33,cfg:'[Xe] 6s²',p:6,g:2,cat:'Métal alcalino-terreux',date:1808,dec:'Humphry Davy',ep:'Ère Spectroscopique'},
+{s:'La',n:'Lanthane',Z:57,m:138.91,cfg:'[Xe] 5d¹ 6s²',p:6,g:3,cat:'Lanthanide',date:1839,dec:'Carl Mosander',ep:'Ère Spectroscopique'},
+{s:'Ce',n:'Cérium',Z:58,m:140.12,cfg:'[Xe] 4f¹ 5d¹ 6s²',p:6,g:3,cat:'Lanthanide',date:1803,dec:'Jöns Berzelius',ep:'Révolution Chimique'},
+{s:'Pr',n:'Praséodyme',Z:59,m:140.91,cfg:'[Xe] 4f³ 6s²',p:6,g:3,cat:'Lanthanide',date:1885,dec:'Carl von Welsbach',ep:'Ère Spectroscopique'},
+{s:'Nd',n:'Néodyme',Z:60,m:144.24,cfg:'[Xe] 4f⁴ 6s²',p:6,g:3,cat:'Lanthanide',date:1885,dec:'Carl von Welsbach',ep:'Ère Spectroscopique'},
+{s:'Pm',n:'Prométhium',Z:61,m:145.0,cfg:'[Xe] 4f⁵ 6s²',p:6,g:3,cat:'Lanthanide',date:1945,dec:'Jacob Marinsky',ep:'Période Moderne'},
+{s:'Sm',n:'Samarium',Z:62,m:150.36,cfg:'[Xe] 4f⁶ 6s²',p:6,g:3,cat:'Lanthanide',date:1879,dec:'Paul Lecoq',ep:'Ère Spectroscopique'},
+{s:'Eu',n:'Europium',Z:63,m:151.96,cfg:'[Xe] 4f⁷ 6s²',p:6,g:3,cat:'Lanthanide',date:1901,dec:'Eugène Demarçay',ep:'Période Moderne'},
+{s:'Gd',n:'Gadolinium',Z:64,m:157.25,cfg:'[Xe] 4f⁷ 5d¹ 6s²',p:6,g:3,cat:'Lanthanide',date:1880,dec:'Jean de Marignac',ep:'Ère Spectroscopique'},
+{s:'Tb',n:'Terbium',Z:65,m:158.93,cfg:'[Xe] 4f⁹ 6s²',p:6,g:3,cat:'Lanthanide',date:1843,dec:'Carl Mosander',ep:'Ère Spectroscopique'},
+{s:'Dy',n:'Dysprosium',Z:66,m:162.5,cfg:'[Xe] 4f¹⁰ 6s²',p:6,g:3,cat:'Lanthanide',date:1886,dec:'Paul Lecoq',ep:'Ère Spectroscopique'},
+{s:'Ho',n:'Holmium',Z:67,m:164.93,cfg:'[Xe] 4f¹¹ 6s²',p:6,g:3,cat:'Lanthanide',date:1878,dec:'Marc Delafontaine',ep:'Ère Spectroscopique'},
+{s:'Er',n:'Erbium',Z:68,m:167.26,cfg:'[Xe] 4f¹² 6s²',p:6,g:3,cat:'Lanthanide',date:1843,dec:'Carl Mosander',ep:'Ère Spectroscopique'},
+{s:'Tm',n:'Thulium',Z:69,m:168.93,cfg:'[Xe] 4f¹³ 6s²',p:6,g:3,cat:'Lanthanide',date:1879,dec:'Per Teodor Cleve',ep:'Ère Spectroscopique'},
+{s:'Yb',n:'Ytterbium',Z:70,m:173.05,cfg:'[Xe] 4f¹⁴ 6s²',p:6,g:3,cat:'Lanthanide',date:1878,dec:'Jean de Marignac',ep:'Ère Spectroscopique'},
+{s:'Lu',n:'Lutécium',Z:71,m:174.97,cfg:'[Xe] 4f¹⁴ 5d¹ 6s²',p:6,g:3,cat:'Lanthanide',date:1907,dec:'Georges Urbain',ep:'Période Moderne'},
+{s:'Hf',n:'Hafnium',Z:72,m:178.49,cfg:'[Xe] 4f¹⁴ 5d² 6s²',p:6,g:4,cat:'Métal de transition',date:1923,dec:'Dirk Coster',ep:'Période Moderne'},
+{s:'Ta',n:'Tantale',Z:73,m:180.95,cfg:'[Xe] 4f¹⁴ 5d³ 6s²',p:6,g:5,cat:'Métal de transition',date:1802,dec:'Anders Ekeberg',ep:'Ère Spectroscopique'},
+{s:'W',n:'Tungstène',Z:74,m:183.84,cfg:'[Xe] 4f¹⁴ 5d⁴ 6s²',p:6,g:6,cat:'Métal de transition',date:1783,dec:'Juan Elhuyar',ep:'Révolution Chimique'},
+{s:'Re',n:'Rhénium',Z:75,m:186.21,cfg:'[Xe] 4f¹⁴ 5d⁵ 6s²',p:6,g:7,cat:'Métal de transition',date:1925,dec:'Walter Noddack',ep:'Période Moderne'},
+{s:'Os',n:'Osmium',Z:76,m:190.23,cfg:'[Xe] 4f¹⁴ 5d⁶ 6s²',p:6,g:8,cat:'Métal de transition',date:1803,dec:'Smithson Tennant',ep:'Ère Spectroscopique'},
+{s:'Ir',n:'Iridium',Z:77,m:192.22,cfg:'[Xe] 4f¹⁴ 5d⁷ 6s²',p:6,g:9,cat:'Métal de transition',date:1803,dec:'Smithson Tennant',ep:'Ère Spectroscopique'},
+{s:'Pt',n:'Platine',Z:78,m:195.08,cfg:'[Xe] 4f¹⁴ 5d⁹ 6s¹',p:6,g:10,cat:'Métal de transition',date:1557,dec:'Julius Scaliger',ep:'Renaissance'},
+{s:'Au',n:'Or',Z:79,m:196.97,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s¹',p:6,g:11,cat:'Métal de transition',date:-6000,dec:'Égyptiens',ep:'Antiquité'},
+{s:'Hg',n:'Mercure',Z:80,m:200.59,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s²',p:6,g:12,cat:'Métal de transition',date:-1500,dec:'Chinois/Égyptiens',ep:'Antiquité'},
+{s:'Tl',n:'Thallium',Z:81,m:204.38,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹',p:6,g:13,cat:'Métal pauvre',date:1861,dec:'William Crookes',ep:'Ère Spectroscopique'},
+{s:'Pb',n:'Plomb',Z:82,m:207.2,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²',p:6,g:14,cat:'Métal pauvre',date:-3000,dec:'Mésopotamiens',ep:'Antiquité'},
+{s:'Bi',n:'Bismuth',Z:83,m:208.98,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³',p:6,g:15,cat:'Métal pauvre',date:1400,dec:'Inconnu',ep:'Moyen-Âge'},
+{s:'Po',n:'Polonium',Z:84,m:209.0,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴',p:6,g:16,cat:'Métalloïde',date:1898,dec:'Pierre Curie',ep:'Période Moderne'},
+{s:'At',n:'Astate',Z:85,m:210.0,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵',p:6,g:17,cat:'Halogène',date:1940,dec:'Dale Corson',ep:'Période Moderne'},
+{s:'Rn',n:'Radon',Z:86,m:222.0,cfg:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶',p:6,g:18,cat:'Gaz noble',date:1900,dec:'Friedrich Dorn',ep:'Période Moderne'},
+/* P7 */ {s:'Fr',n:'Francium',Z:87,m:223.0,cfg:'[Rn] 7s¹',p:7,g:1,cat:'Métal alcalin',date:1939,dec:'Marguerite Perey',ep:'Période Moderne'},
+{s:'Ra',n:'Radium',Z:88,m:226.0,cfg:'[Rn] 7s²',p:7,g:2,cat:'Métal alcalino-terreux',date:1898,dec:'Pierre Curie',ep:'Période Moderne'},
+{s:'Ac',n:'Actinium',Z:89,m:227.0,cfg:'[Rn] 6d¹ 7s²',p:7,g:3,cat:'Actinide',date:1899,dec:'André Debierne',ep:'Période Moderne'},
+{s:'Th',n:'Thorium',Z:90,m:232.04,cfg:'[Rn] 6d² 7s²',p:7,g:3,cat:'Actinide',date:1828,dec:'Jöns Berzelius',ep:'Ère Spectroscopique'},
+{s:'Pa',n:'Protactinium',Z:91,m:231.04,cfg:'[Rn] 5f² 6d¹ 7s²',p:7,g:3,cat:'Actinide',date:1913,dec:'Kasimir Fajans',ep:'Période Moderne'},
+{s:'U',n:'Uranium',Z:92,m:238.03,cfg:'[Rn] 5f³ 6d¹ 7s²',p:7,g:3,cat:'Actinide',date:1789,dec:'Martin Klaproth',ep:'Révolution Chimique'},
+{s:'Np',n:'Neptunium',Z:93,m:237.0,cfg:'[Rn] 5f⁴ 6d¹ 7s²',p:7,g:3,cat:'Actinide',date:1940,dec:'Edwin McMillan',ep:'Période Moderne'},
+{s:'Pu',n:'Plutonium',Z:94,m:244.0,cfg:'[Rn] 5f⁶ 7s²',p:7,g:3,cat:'Actinide',date:1940,dec:'Glenn Seaborg',ep:'Période Moderne'},
+{s:'Am',n:'Américium',Z:95,m:243.0,cfg:'[Rn] 5f⁷ 7s²',p:7,g:3,cat:'Actinide',date:1944,dec:'Glenn Seaborg',ep:'Période Moderne'},
+{s:'Cm',n:'Curium',Z:96,m:247.0,cfg:'[Rn] 5f⁷ 6d¹ 7s²',p:7,g:3,cat:'Actinide',date:1944,dec:'Glenn Seaborg',ep:'Période Moderne'},
+{s:'Bk',n:'Berkélium',Z:97,m:247.0,cfg:'[Rn] 5f⁹ 7s²',p:7,g:3,cat:'Actinide',date:1949,dec:'Glenn Seaborg',ep:'Période Moderne'},
+{s:'Cf',n:'Californium',Z:98,m:251.0,cfg:'[Rn] 5f¹⁰ 7s²',p:7,g:3,cat:'Actinide',date:1950,dec:'Glenn Seaborg',ep:'Période Moderne'},
+{s:'Es',n:'Einsteinium',Z:99,m:252.0,cfg:'[Rn] 5f¹¹ 7s²',p:7,g:3,cat:'Actinide',date:1952,dec:'Albert Ghiorso',ep:'Période Moderne'},
+{s:'Fm',n:'Fermium',Z:100,m:257.0,cfg:'[Rn] 5f¹² 7s²',p:7,g:3,cat:'Actinide',date:1952,dec:'Albert Ghiorso',ep:'Période Moderne'},
+{s:'Md',n:'Mendélévium',Z:101,m:258.0,cfg:'[Rn] 5f¹³ 7s²',p:7,g:3,cat:'Actinide',date:1955,dec:'Albert Ghiorso',ep:'Période Moderne'},
+{s:'No',n:'Nobélium',Z:102,m:259.0,cfg:'[Rn] 5f¹⁴ 7s²',p:7,g:3,cat:'Actinide',date:1958,dec:'Albert Ghiorso',ep:'Période Moderne'},
+{s:'Lr',n:'Lawrencium',Z:103,m:262.0,cfg:'[Rn] 5f¹⁴ 7s² 7p¹',p:7,g:3,cat:'Actinide',date:1961,dec:'Albert Ghiorso',ep:'Période Moderne'},
+{s:'Rf',n:'Rutherfordium',Z:104,m:267.0,cfg:'[Rn] 5f¹⁴ 6d² 7s²',p:7,g:4,cat:'Métal de transition',date:1964,dec:'Georgy Flerov',ep:'Période Moderne'},
+{s:'Db',n:'Dubnium',Z:105,m:268.0,cfg:'[Rn] 5f¹⁴ 6d³ 7s²',p:7,g:5,cat:'Métal de transition',date:1967,dec:'Georgy Flerov',ep:'Période Moderne'},
+{s:'Sg',n:'Seaborgium',Z:106,m:269.0,cfg:'[Rn] 5f¹⁴ 6d⁴ 7s²',p:7,g:6,cat:'Métal de transition',date:1974,dec:'Albert Ghiorso',ep:'Période Moderne'},
+{s:'Bh',n:'Bohrium',Z:107,m:270.0,cfg:'[Rn] 5f¹⁴ 6d⁵ 7s²',p:7,g:7,cat:'Métal de transition',date:1981,dec:'Peter Armbruster',ep:'Période Moderne'},
+{s:'Hs',n:'Hassium',Z:108,m:270.0,cfg:'[Rn] 5f¹⁴ 6d⁶ 7s²',p:7,g:8,cat:'Métal de transition',date:1984,dec:'Peter Armbruster',ep:'Période Moderne'},
+{s:'Mt',n:'Meitnérium',Z:109,m:278.0,cfg:'[Rn] 5f¹⁴ 6d⁷ 7s²',p:7,g:9,cat:'Métal de transition',date:1982,dec:'Peter Armbruster',ep:'Période Moderne'},
+{s:'Ds',n:'Darmstadtium',Z:110,m:281.0,cfg:'[Rn] 5f¹⁴ 6d⁹ 7s¹',p:7,g:10,cat:'Métal de transition',date:1994,dec:'Sigurd Hofmann',ep:'Période Moderne'},
+{s:'Rg',n:'Roentgenium',Z:111,m:282.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s¹',p:7,g:11,cat:'Métal de transition',date:1994,dec:'Sigurd Hofmann',ep:'Période Moderne'},
+{s:'Cn',n:'Copernicium',Z:112,m:285.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s²',p:7,g:12,cat:'Métal de transition',date:1996,dec:'Sigurd Hofmann',ep:'Période Moderne'},
+{s:'Nh',n:'Nihonium',Z:113,m:286.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹',p:7,g:13,cat:'Métal pauvre',date:2004,dec:'RIKEN',ep:'Période Moderne'},
+{s:'Fl',n:'Flérovium',Z:114,m:289.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²',p:7,g:14,cat:'Métal pauvre',date:1999,dec:'JINR',ep:'Période Moderne'},
+{s:'Mc',n:'Moscovium',Z:115,m:290.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³',p:7,g:15,cat:'Métal pauvre',date:2004,dec:'JINR',ep:'Période Moderne'},
+{s:'Lv',n:'Livermorium',Z:116,m:293.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴',p:7,g:16,cat:'Métal pauvre',date:2000,dec:'JINR',ep:'Période Moderne'},
+{s:'Ts',n:'Tennessine',Z:117,m:294.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵',p:7,g:17,cat:'Halogène',date:2010,dec:'JINR',ep:'Période Moderne'},
+{s:'Og',n:'Oganesson',Z:118,m:294.0,cfg:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶',p:7,g:18,cat:'Gaz noble',date:2006,dec:'JINR',ep:'Période Moderne'}
+];
+
+/* --------------------------------------------------------------------- */
+const EPOCHS = [
+  {nom:'Antiquité',           periode:'Avant 500',           bg:'#EFF6FF', border:'#1D4ED8', color:'#1E3A8A', point:'#93C5FD', desc:"Éléments connus depuis l'antiquité"},
+  {nom:'Moyen-Âge',           periode:'500 – 1500',          bg:'#DBEAFE', border:'#2563EB', color:'#1E3A8A', point:'#60A5FA', desc:"Éléments découverts au Moyen-Âge"},
+  {nom:'Renaissance',         periode:'1500 – 1700',         bg:'#BFDBFE', border:'#3B82F6', color:'#1E3A8A', point:'#3B82F6', desc:"Découvertes de la Renaissance et de l'Âge des Lumières"},
+  {nom:'Révolution Chimique', periode:'1700 – 1800',         bg:'#93C5FD', border:'#1D4ED8', color:'#0F172A', point:'#1D4ED8', desc:"Période de la révolution chimique"},
+  {nom:'Ère Spectroscopique', periode:'1800 – 1900',         bg:'#3B82F6', border:'#1E3A8A', color:'#FFFFFF', point:'#1E3A8A', desc:"Découvertes par spectroscopie et électrolyse"},
+  {nom:'Période Moderne',     periode:"1900 – Aujourd'hui",  bg:'#C8102E', border:'#7F0F1F', color:'#FFFFFF', point:'#C8102E', desc:"Éléments découverts au 20ᵉ siècle et au-delà"}
+];
+
+const CATEGORIES = [
+  'Métal alcalin','Métal alcalino-terreux','Métal de transition','Métal pauvre',
+  'Métalloïde','Non-metal','Halogène','Gaz noble','Lanthanide','Actinide'
+];
+
+const CAT_COLORS = {
+  'Métal alcalin':           '#C8102E',
+  'Métal alcalino-terreux':  '#E85D75',
+  'Métal de transition':     '#1D4ED8',
+  'Métal pauvre':            '#3B82F6',
+  'Métalloïde':              '#60A5FA',
+  'Non-metal':               '#BFDBFE',
+  'Halogène':                '#93C5FD',
+  'Gaz noble':               '#FCA5A5',
+  'Lanthanide':              '#A5B4FC',
+  'Actinide':                '#FDA4AF'
+};
+
+/* Spectres : rgb, longueur d'onde principale, raies secondaires */
+const SPECTRAL = {
+  'H':  {rgb:[255,90,90],  wl:656.3, sec:[486.1,434.0], lines:['656.3 nm (Hα)','486.1 nm (Hβ)']},
+  'He': {rgb:[210,160,255],wl:587.6, sec:[667.8,501.6], lines:['587.6 nm','667.8 nm']},
+  'Li': {rgb:[255,60,60],  wl:670.8, sec:[610.4],       lines:['670.8 nm']},
+  'Na': {rgb:[255,220,0],  wl:589.0, sec:[589.6,568.8], lines:['589.0 nm','589.6 nm']},
+  'K':  {rgb:[255,180,0],  wl:766.5, sec:[769.9,404.4], lines:['766.5 nm','769.9 nm']},
+  'Rb': {rgb:[200,40,40],  wl:780.0, sec:[794.8],       lines:['780.0 nm','794.8 nm']},
+  'Cs': {rgb:[40,60,255],  wl:455.5, sec:[459.3],       lines:['455.5 nm']},
+  'Ca': {rgb:[255,150,150],wl:422.7, sec:[393.4],       lines:['422.7 nm']},
+  'Sr': {rgb:[255,100,100],wl:460.7, sec:[407.8],       lines:['460.7 nm']},
+  'Ba': {rgb:[130,255,130],wl:553.5, sec:[455.4],       lines:['553.5 nm']},
+  'Cu': {rgb:[50,220,50],  wl:521.8, sec:[324.8],       lines:['521.8 nm']},
+  'B':  {rgb:[80,255,80],  wl:518.0, sec:[249.7],       lines:['518.0 nm']},
+  'Tl': {rgb:[60,255,60],  wl:535.0, sec:[377.6],       lines:['535.0 nm']},
+  'Hg': {rgb:[110,110,255],wl:435.8, sec:[546.1,404.7], lines:['435.8 nm','546.1 nm']},
+  'As': {rgb:[70,70,220],  wl:450.0, sec:[228.8],       lines:['450.0 nm']},
+  'Pb': {rgb:[150,150,255],wl:405.8, sec:[368.3],       lines:['405.8 nm']},
+  'Fe': {rgb:[255,165,0],  wl:438.4, sec:[526.9],       lines:['438.4 nm']},
+  'Ne': {rgb:[255,100,255],wl:640.2, sec:[585.2,614.3], lines:['640.2 nm']},
+  'Ar': {rgb:[180,100,220],wl:750.4, sec:[696.5],       lines:['750.4 nm']},
+  'Kr': {rgb:[200,180,255],wl:587.1, sec:[557.0],       lines:['587.1 nm']},
+  'Xe': {rgb:[160,200,255],wl:467.1, sec:[462.4],       lines:['467.1 nm']},
+  'Cr': {rgb:[200,220,100],wl:520.8, sec:[425.4],       lines:['520.8 nm']},
+  'Mn': {rgb:[210,160,110],wl:403.3, sec:[279.5],       lines:['403.3 nm']},
+  'Co': {rgb:[150,160,210],wl:345.4, sec:[240.7],       lines:['345.4 nm']},
+  'Ni': {rgb:[110,160,160],wl:341.5, sec:[232.0],       lines:['341.5 nm']},
+  'Ag': {rgb:[210,210,210],wl:328.1, sec:[338.3],       lines:['328.1 nm']},
+  'Au': {rgb:[255,215,0],  wl:267.6, sec:[242.8],       lines:['267.6 nm']},
+  'Ce': {rgb:[255,210,160],wl:456.2, sec:[418.7],       lines:['456.2 nm']},
+  'Eu': {rgb:[190,255,190],wl:612.0, sec:[459.4],       lines:['612.0 nm']},
+  'Gd': {rgb:[160,200,255],wl:376.8, sec:[422.6],       lines:['376.8 nm']},
+  'Tb': {rgb:[110,255,200],wl:541.0, sec:[432.6],       lines:['541.0 nm']},
+  'U':  {rgb:[110,200,110],wl:591.5, sec:[424.4],       lines:['591.5 nm']},
+  'Pu': {rgb:[160,110,160],wl:476.0, sec:[453.6],       lines:['476.0 nm']}
+};
+
+/* Layout du tableau périodique (18 colonnes) */
+const LAYOUT = [
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+  [3,4,0,0,0,0,0,0,0,0,0,0,5,6,7,8,9,10],
+  [11,12,0,0,0,0,0,0,0,0,0,0,13,14,15,16,17,18],
+  [19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36],
+  [37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54],
+  [55,56,57,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86],
+  [87,88,89,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [null,null,'Lanthanides',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+  [null,null,58,59,60,61,62,63,64,65,66,67,68,69,70,71,null,null],
+  [null,null,'Actinides',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+  [null,null,90,91,92,93,94,95,96,97,98,99,100,101,102,103,null,null]
+];
+
+/* =========================================================================
+   2. ÉTAT
+   ========================================================================= */
+const state = {
+  section: 'Tableau Périodique',
+  epochs: new Set(EPOCHS.map(e => e.nom)),
+  categories: new Set(CATEGORIES),
+  showSpectra: true,
+  groupByEpoch: true,
+  explorerElement: 'H',
+  spectralTab: 'categorie',
+  compare: ['H','Na','Hg','Ne']
+};
+
+/* =========================================================================
+   3. UTILITAIRES
+   ========================================================================= */
+const byZ = {}; ELEMENTS.forEach(e => byZ[e.Z] = e);
+const byS = {}; ELEMENTS.forEach(e => byS[e.s] = e);
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function lum(hex){
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return 0.299*r + 0.587*g + 0.114*b;
+}
+function txtOn(hex){ return lum(hex) > 165 ? '#0f172a' : '#ffffff'; }
+function hexToRgb(hex){
+  return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+}
+function catHex(cat){ return CAT_COLORS[cat] || '#94a3b8'; }
+function spectralRgb(sym){
+  if (SPECTRAL[sym]) return SPECTRAL[sym].rgb;
+  const el = byS[sym];
+  if (el) return hexToRgb(catHex(el.cat));
+  return [148,163,184];
+}
+function yearLabel(y){ return y > 0 ? y : 'Antiquité'; }
+function isVisible(el){
+  return state.epochs.has(el.ep) && state.categories.has(el.cat);
+}
+
+/* =========================================================================
+   4. SIDEBAR
+   ========================================================================= */
+function renderSidebar(){
+  const sb = document.getElementById('sidebar');
+  const sections = ['Tableau Périodique','Frise Chronologique','Vue par Époque','Analyse Spectrale',"Explorateur d'Éléments"];
+  sb.innerHTML = `
+    <h2>🎛️ Navigation</h2>
+    <h3>Vues principales</h3>
+    <div class="nav">
+      ${sections.map(s => `<button class="nav-btn ${state.section===s?'active':''}" data-section="${esc(s)}">${esc(s)}</button>`).join('')}
+    </div>
+    <h3>Filtrer par époque</h3>
+    <div class="filter-list">
+      ${EPOCHS.map(ep => `
+        <label class="filter-item">
+          <input type="checkbox" data-epoch="${esc(ep.nom)}" ${state.epochs.has(ep.nom)?'checked':''}>
+          <span class="swatch" style="background:${ep.point}"></span>
+          <span>${esc(ep.nom)}</span>
+        </label>`).join('')}
+    </div>
+    <h3>Filtrer par catégorie</h3>
+    <div class="filter-list">
+      ${CATEGORIES.map(c => `
+        <label class="filter-item">
+          <input type="checkbox" data-cat="${esc(c)}" ${state.categories.has(c)?'checked':''}>
+          <span class="swatch" style="background:${catHex(c)}"></span>
+          <span>${esc(c)}</span>
+        </label>`).join('')}
+    </div>
+    <h3>Options d'affichage</h3>
+    <label class="opt-row"><input type="checkbox" id="optSpectra" ${state.showSpectra?'checked':''}> Afficher les spectres simulés</label>
+    <label class="opt-row"><input type="checkbox" id="optGroup" ${state.groupByEpoch?'checked':''}> Grouper par époque historique</label>
+  `;
+
+  sb.querySelectorAll('.nav-btn').forEach(b => {
+    b.onclick = () => { state.section = b.dataset.section; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+  });
+  sb.querySelectorAll('[data-epoch]').forEach(cb => {
+    cb.onchange = () => {
+      if (cb.checked) state.epochs.add(cb.dataset.epoch); else state.epochs.delete(cb.dataset.epoch);
+      renderMain();
+    };
+  });
+  sb.querySelectorAll('[data-cat]').forEach(cb => {
+    cb.onchange = () => {
+      if (cb.checked) state.categories.add(cb.dataset.cat); else state.categories.delete(cb.dataset.cat);
+      renderMain();
+    };
+  });
+  const oS = sb.querySelector('#optSpectra');
+  oS.onchange = () => { state.showSpectra = oS.checked; renderMain(); };
+  const oG = sb.querySelector('#optGroup');
+  oG.onchange = () => { state.groupByEpoch = oG.checked; renderMain(); };
+}
+
+/* =========================================================================
+   5. MAIN
+   ========================================================================= */
+function renderMain(){
+  const m = document.getElementById('mainContent');
+  let html = `
+    <h1 class="main-header">🌌 Tableau Périodique Complet</h1>
+    <p class="sub-header">
+      <strong>Classification des 118 éléments par date de découverte</strong><br>
+      Explorez l'histoire complète de la découverte des éléments et leurs signatures spectrales uniques
+    </p>
+  `;
+
+  if (state.section === 'Tableau Périodique'){
+    html += sectionPeriodicTable();
+    if (state.groupByEpoch) html += sectionEpochOverview();
+  } else if (state.section === 'Frise Chronologique'){
+    html += sectionTimeline();
+    html += sectionSpectral('epoque');
+  } else if (state.section === 'Vue par Époque'){
+    html += sectionEpochOverview();
+    html += sectionSpectral('epoque');
+  } else if (state.section === 'Analyse Spectrale'){
+    html += sectionSpectral(state.spectralTab);
+    html += sectionExplorer();
+  } else if (state.section === "Explorateur d'Éléments"){
+    html += sectionExplorer();
+  }
+
+  html += `
+    <div class="footer">
+      <strong>Tableau Périodique Complet — Classification Historique et Spectrale</strong><br>
+      Base de données des 118 éléments avec dates de découverte et spectres RGB caractéristiques<br>
+      <span style="color:#002395">■</span> <span style="color:#ffffff;text-shadow:0 0 0 #ccc">■</span> <span style="color:#ED2939">■</span>
+      Données historiques et spectrales compilées pour l'étude de l'évolution de la chimie et de la spectroscopie
+    </div>
+  `;
+
+  m.innerHTML = html;
+  attachMainListeners();
+}
+
+function attachMainListeners(){
+  const m = document.getElementById('mainContent');
+
+  // Clic sur une case du tableau périodique → explorateur
+  m.querySelectorAll('.pcell[data-sym]').forEach(cell => {
+    cell.onclick = () => {
+      state.explorerElement = cell.dataset.sym;
+      state.section = "Explorateur d'Éléments";
+      render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+  });
+
+  // Onglets spectraux
+  m.querySelectorAll('.tab[data-tab]').forEach(t => {
+    t.onclick = () => { state.spectralTab = t.dataset.tab; renderMain(); };
+  });
+
+  // Sélecteur de l'explorateur
+  const sel = m.querySelector('#explorerSelect');
+  if (sel){
+    sel.onchange = () => { state.explorerElement = sel.value; renderMain(); };
+  }
+
+  // Multiselect de comparaison
+  const multi = m.querySelector('#compareSelect');
+  if (multi){
+    multi.onchange = () => {
+      state.compare = Array.from(multi.selectedOptions).map(o => o.value);
+      renderMain();
+    };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   SECTION : Tableau périodique
+   --------------------------------------------------------------------- */
+function sectionPeriodicTable(){
+  let grid = '';
+  LAYOUT.forEach(row => {
+    row.forEach(cell => {
+      if (cell === 0 || cell === null){
+        grid += `<div class="pcell empty"></div>`;
+      } else if (typeof cell === 'string'){
+        grid += `<div class="pcell label">${esc(cell)}</div>`;
+      } else {
+        const el = byZ[cell];
+        if (!el){ grid += `<div class="pcell empty"></div>`; return; }
+        const hex = catHex(el.cat);
+        const tc = txtOn(hex);
+        const vis = isVisible(el);
+        grid += `
+          <div class="pcell ${vis?'':'dimmed'}" data-sym="${el.s}"
+               style="background:${hex};color:${tc}"
+               title="${esc(el.n)} — ${esc(el.cat)} — Découvert ${esc(yearLabel(el.date))} par ${esc(el.dec)}">
+            <strong>${esc(el.s)}</strong>
+            <span>${el.Z}</span>
+          </div>`;
+      }
+    });
+  });
+
+  const legend = CATEGORIES.map(c => `
+    <span><span class="dot" style="background:${catHex(c)}"></span>${esc(c)}</span>
+  `).join('');
+
+  return `
+    <h3 class="section-header">🧪 TABLEAU PÉRIODIQUE COMPLET — CLASSÉ PAR DATE DE DÉCOUVERTE</h3>
+    <div class="legend">${legend}</div>
+    <div class="ptable-wrap"><div class="ptable">${grid}</div></div>
+  `;
+}
+
+/* ---------------------------------------------------------------------
+   SECTION : Vue par époque
+   --------------------------------------------------------------------- */
+function sectionEpochOverview(){
+  let html = `<h3 class="section-header">🏛️ VUE DÉTAILLÉE PAR ÉPOQUE HISTORIQUE</h3>`;
+
+  EPOCHS.forEach(ep => {
+    if (!state.epochs.has(ep.nom)) return;
+    const els = ELEMENTS.filter(e => e.ep === ep.nom && state.categories.has(e.cat));
+    if (!els.length) return;
+
+    html += `
+      <div class="epoch-banner" style="background:${ep.bg};border-left-color:${ep.border};color:${ep.color}">
+        <div style="flex:1">
+          <h3>${esc(ep.nom)} <span style="opacity:.75;font-weight:500">(${esc(ep.periode)})</span></h3>
+          <p>${esc(ep.desc)} — <strong>${els.length} élément${els.length>1?'s':''}</strong></p>
+        </div>
+      </div>
+      <div class="cards-grid">
+        ${els.map(el => {
+          const rgb = spectralRgb(el.s);
+          const hex = `#${rgb.map(v=>v.toString(16).padStart(2,'0')).join('')}`;
+          return `
+            <div class="discovery-card">
+              <h4>${esc(el.s)}</h4>
+              <div class="rgb-spectrum" style="background:linear-gradient(90deg,${hex}80,${hex})"></div>
+              <span class="nm">${esc(el.n)}</span>
+              <small>N° ${el.Z} · ${esc(el.cat)}</small>
+              <small>Découvert ${esc(yearLabel(el.date))}</small>
+              <small><em>${esc(el.dec.length>28 ? el.dec.slice(0,28)+'…' : el.dec)}</em></small>
+            </div>`;
+        }).join('')}
+      </div>
+    `;
+  });
+
+  if (!html.includes('discovery-card')){
+    html += `<div class="empty-msg">Aucun élément ne correspond aux filtres sélectionnés.</div>`;
+  }
+  return html;
+}
+
+/* ---------------------------------------------------------------------
+   SECTION : Frise chronologique
+   --------------------------------------------------------------------- */
+function sectionTimeline(){
+  const W = 1020, H = 470;
+  const padL = 58, padR = 28, padT = 22, padB = 58;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const xMin = 0, xMax = 2030;
+  const x = yr => padL + (yr - xMin) / (xMax - xMin) * plotW;
+  const y = z => padT + plotH - (z - 1) / 117 * plotH;
+
+  // Grille
+  let grid = '';
+  for (let yr = 0; yr <= 2000; yr += 250){
+    grid += `<line x1="${x(yr)}" y1="${padT}" x2="${x(yr)}" y2="${padT+plotH}" stroke="#e2e8f0" stroke-width="1"/>`;
+    grid += `<text x="${x(yr)}" y="${H-padB+20}" text-anchor="middle" font-size="11" fill="#64748b">${yr}</text>`;
+  }
+  for (let z = 1; z <= 118; z += 10){
+    grid += `<line x1="${padL}" y1="${y(z)}" x2="${padL+plotW}" y2="${y(z)}" stroke="#eef2f8" stroke-width="1"/>`;
+    grid += `<text x="${padL-9}" y="${y(z)+4}" text-anchor="end" font-size="11" fill="#64748b">${z}</text>`;
+  }
+
+  // Points
+  let pts = '';
+  ELEMENTS.forEach(el => {
+    const ep = EPOCHS.find(e => e.nom === el.ep);
+    const vis = isVisible(el);
+    const cx = x(Math.max(0, Math.min(2030, el.date)));
+    const cy = y(el.Z);
+    pts += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5" fill="${ep.point}" stroke="#fff" stroke-width="1.3" opacity="${vis?0.95:0.08}">
+      <title>${esc(el.n)} (${el.s}) — ${esc(yearLabel(el.date))} — ${esc(el.dec)}</title>
+    </circle>`;
+  });
+
+  const legend = EPOCHS.map(e => `
+    <span style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;font-size:.78rem;color:#334155">
+      <span style="width:12px;height:12px;border-radius:50%;background:${e.point};display:inline-block"></span>${esc(e.nom)}
+    </span>`).join('');
+
+  return `
+    <h3 class="section-header">📅 FRISE CHRONOLOGIQUE DES DÉCOUVERTES</h3>
+    <div class="chart-box">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+        ${grid}
+        <line x1="${padL}" y1="${padT+plotH}" x2="${padL+plotW}" y2="${padT+plotH}" stroke="#94a3b8" stroke-width="1.2"/>
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="#94a3b8" stroke-width="1.2"/>
+        <text x="${padL+plotW/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="#475569" font-weight="600">Année de découverte</text>
+        <text x="16" y="${padT+plotH/2}" text-anchor="middle" font-size="12" fill="#475569" font-weight="600" transform="rotate(-90 16 ${padT+plotH/2})">Numéro atomique</text>
+        ${pts}
+      </svg>
+    </div>
+    <div style="text-align:center;margin-bottom:14px">${legend}</div>
+  `;
+}
+
+/* ---------------------------------------------------------------------
+   SECTION : Analyse spectrale (avec onglets)
+   --------------------------------------------------------------------- */
+function sectionSpectral(initialTab){
+  const tab = initialTab || state.spectralTab;
+
+  let tabsHtml = `
+    <div class="tabs">
+      <button class="tab ${tab==='categorie'?'active':''}" data-tab="categorie">Par catégorie</button>
+      <button class="tab ${tab==='epoque'?'active':''}" data-tab="epoque">Par époque</button>
+      <button class="tab ${tab==='comparaison'?'active':''}" data-tab="comparaison">Comparaison</button>
+    </div>`;
+
+  let content = '';
+
+  if (tab === 'categorie'){
+    content = '<div class="sub-title">Palettes spectrales par catégorie chimique</div>';
+    CATEGORIES.forEach(cat => {
+      if (!state.categories.has(cat)) return;
+      const els = ELEMENTS.filter(e => e.cat === cat);
+      if (!els.length) return;
+      content += `<div class="sub-title" style="font-size:.85rem;color:#334155">${esc(cat)} <span style="color:#94a3b8;font-weight:500">(${els.length} éléments)</span></div>`;
+      content += `<div class="chip-row">`;
+      els.forEach(el => {
+        const rgb = spectralRgb(el.s);
+        const hex = `#${rgb.map(v=>v.toString(16).padStart(2,'0')).join('')}`;
+        content += `
+          <div class="chip" style="background:${hex}22">
+            <strong>${esc(el.s)}</strong>
+            <div class="bar" style="background:linear-gradient(90deg,${hex}80,${hex})"></div>
+            <div style="color:#475569">${esc(el.n)}</div>
+          </div>`;
+      });
+      content += `</div>`;
+    });
+  }
+
+  else if (tab === 'epoque'){
+    content = '<div class="sub-title">Signature spectrale moyenne par époque</div>';
+    EPOCHS.forEach(ep => {
+      if (!state.epochs.has(ep.nom)) return;
+      const els = ELEMENTS.filter(e => e.ep === ep.nom && state.categories.has(e.cat));
+      if (!els.length) return;
+      const rgbs = els.map(e => spectralRgb(e.s));
+      const avg = [0,1,2].map(i => Math.round(rgbs.reduce((a,r)=>a+r[i],0) / rgbs.length));
+      const hex = `#${avg.map(v=>v.toString(16).padStart(2,'0')).join('')}`;
+      const tc = txtOn(hex);
+      content += `
+        <div style="display:flex;align-items:center;margin:12px 0;padding:15px 18px;border-radius:12px;background:linear-gradient(135deg,${hex}22,${hex}66);border:1px solid ${hex}55">
+          <div style="width:64px;height:64px;background:${hex};border-radius:9px;margin-right:18px;border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;color:${tc};font-weight:800;font-size:.72rem">RGB</div>
+          <div style="flex:1">
+            <h4 style="margin:0 0 4px;color:#0f172a">${esc(ep.nom)} <span style="font-weight:500;color:#64748b">(${esc(ep.periode)})</span></h4>
+            <p style="margin:0;font-size:.8rem;color:#334155">${esc(ep.desc)} — <strong>${els.length} élément${els.length>1?'s':''}</strong> — rgb(${avg.join(', ')})</p>
+          </div>
+        </div>`;
+    });
+    if (!content.includes('rgb(')) content += `<div class="empty-msg">Aucune époque sélectionnée.</div>`;
+  }
+
+  else { // comparaison
+    content = `
+      <div class="sub-title">Sélectionnez des éléments à comparer</div>
+      <select id="compareSelect" multiple size="8">
+        ${ELEMENTS.map(e => `<option value="${e.s}" ${state.compare.includes(e.s)?'selected':''}>${e.s} — ${esc(e.n)}</option>`).join('')}
+      </select>
+      <div style="margin-top:16px">${comparisonChart(state.compare)}</div>
+    `;
+  }
+
+  return `
+    <h3 class="section-header">🌈 ANALYSE SPECTRALE COMPLÈTE</h3>
+    ${tabsHtml}
+    ${content}
+  `;
+}
+
+function comparisonChart(symbols){
+  if (!symbols || !symbols.length) return `<div class="empty-msg">Sélectionnez au moins un élément.</div>`;
+
+  const W = 920, H = 330;
+  const padL = 48, padR = 22, padT = 22, padB = 48;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const wlMin = 380, wlMax = 780;
+  const x = wl => padL + (wl - wlMin) / (wlMax - wlMin) * plotW;
+  const y = v => padT + plotH - v * plotH;
+
+  let grid = '';
+  for (let wl = 400; wl <= 780; wl += 50){
+    grid += `<line x1="${x(wl)}" y1="${padT}" x2="${x(wl)}" y2="${padT+plotH}" stroke="#e2e8f0"/>`;
+    grid += `<text x="${x(wl)}" y="${H-padB+20}" text-anchor="middle" font-size="11" fill="#64748b">${wl}</text>`;
+  }
+  for (let v = 0; v <= 1.001; v += 0.25){
+    grid += `<line x1="${padL}" y1="${y(v)}" x2="${padL+plotW}" y2="${y(v)}" stroke="#eef2f8"/>`;
+    grid += `<text x="${padL-9}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#64748b">${v.toFixed(2)}</text>`;
+  }
+
+  let paths = '', legend = '';
+  symbols.forEach(sym => {
+    const info = SPECTRAL[sym];
+    const rgb = spectralRgb(sym);
+    const col = `rgb(${rgb.join(',')})`;
+    let d = '';
+    for (let i = 0; i <= 220; i++){
+      const wl = wlMin + (wlMax - wlMin) * i / 220;
+      let v = 0;
+      if (info){
+        if (info.wl >= wlMin && info.wl <= wlMax)
+          v += 0.85 * Math.exp(-0.5 * Math.pow((wl - info.wl) / 14, 2));
+        (info.sec || []).forEach(s => {
+          if (s >= wlMin && s <= wlMax) v += 0.4 * Math.exp(-0.5 * Math.pow((wl - s) / 10, 2));
+        });
+      }
+      v = Math.min(1, v);
+      d += (i === 0 ? 'M' : 'L') + ` ${x(wl).toFixed(2)} ${y(v).toFixed(2)} `;
+    }
+    paths += `<path d="${d}" fill="none" stroke="${col}" stroke-width="2.4" opacity="0.92"/>`;
+    legend += `<span style="display:inline-flex;align-items:center;gap:6px;margin:0 14px 6px 0;font-size:.79rem;color:#334155"><span style="width:16px;height:4px;background:${col};display:inline-block;border-radius:2px"></span>${sym} — ${esc(byS[sym] ? byS[sym].n : '')}</span>`;
+  });
+
+  return `
+    <div class="chart-box">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+        <rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH}" fill="url(#visibleSpectrum)" opacity="0.11"/>
+        ${grid}
+        <line x1="${padL}" y1="${padT+plotH}" x2="${padL+plotW}" y2="${padT+plotH}" stroke="#94a3b8" stroke-width="1.2"/>
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="#94a3b8" stroke-width="1.2"/>
+        <text x="${padL+plotW/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="#475569" font-weight="600">Longueur d'onde (nm)</text>
+        <text x="14" y="${padT+plotH/2}" text-anchor="middle" font-size="12" fill="#475569" font-weight="600" transform="rotate(-90 14 ${padT+plotH/2})">Intensité relative</text>
+        ${paths}
+      </svg>
+      <div style="margin-top:10px;text-align:center">${legend}</div>
+    </div>`;
+}
+
+/* ---------------------------------------------------------------------
+   SECTION : Explorateur d'éléments
+   --------------------------------------------------------------------- */
+function sectionExplorer(){
+  const el = byS[state.explorerElement] || ELEMENTS[0];
+  const rgb = spectralRgb(el.s);
+  const hex = `#${rgb.map(v=>v.toString(16).padStart(2,'0')).join('')}`;
+  const info = SPECTRAL[el.s];
+  const catHex_ = catHex(el.cat);
+
+  const options = ELEMENTS.map(e =>
+    `<option value="${e.s}" ${e.s === el.s ? 'selected' : ''}>${e.s} — ${esc(e.n)}</option>`
+  ).join('');
+
+  return `
+    <h3 class="section-header">🔍 EXPLORATEUR DÉTAILLÉ DES ÉLÉMENTS</h3>
+
+    <div style="margin-bottom:18px">
+      <label style="font-size:.83rem;font-weight:700;color:#334155;display:block;margin-bottom:6px">Choisir un élément :</label>
+      <select id="explorerSelect" style="min-width:280px">${options}</select>
+    </div>
+
+    <div class="explorer-top" style="background:linear-gradient(135deg,${hex}18,${hex}44);border-color:${hex}">
+      <div style="display:inline-block;padding:6px 14px;border-radius:20px;background:${catHex_};color:${txtOn(catHex_)};font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase">${esc(el.cat)}</div>
+      <h2 style="margin:12px 0 4px;color:#0f172a;font-size:1.9rem">${esc(el.s)} — ${esc(el.n)}</h2>
+      <div class="explorer-circle" style="background:${hex}"></div>
+      <p style="margin:0;color:#475569;font-size:.82rem">Spectre RGB caractéristique : rgb(${rgb.join(', ')})</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h4>📜 Données historiques</h4>
+        <p><strong>Numéro atomique :</strong> ${el.Z}</p>
+        <p><strong>Date de découverte :</strong> ${esc(yearLabel(el.date))}</p>
+        <p><strong>Découvreur :</strong> ${esc(el.dec)}</p>
+        <p><strong>Période historique :</strong> ${esc(el.ep)}</p>
+        <p><strong>Période :</strong> ${el.p} · <strong>Groupe :</strong> ${el.g}</p>
+      </div>
+      <div class="info-card">
+        <h4>⚛️ Propriétés atomiques</h4>
+        <p><strong>Masse atomique :</strong> ${el.m} u</p>
+        <p><strong>Configuration électronique :</strong> ${esc(el.cfg)}</p>
+        <p><strong>Catégorie :</strong> ${esc(el.cat)}</p>
+      </div>
+      <div class="info-card">
+        <h4>🌈 Données spectrales</h4>
+        ${info ? `
+          <p><strong>Couleur RGB :</strong> ${rgb.join(', ')}</p>
+          <p><strong>Longueur d'onde principale :</strong> ${info.wl} nm</p>
+          <p><strong>Raies caractéristiques :</strong><br>${info.lines.map(esc).join('<br>')}</p>
+        ` : `
+          <p><strong>Couleur RGB estimée :</strong> ${rgb.join(', ')}</p>
+          <p style="color:#94a3b8"><em>Aucune raie spectrale répertoriée dans cette base pour cet élément.</em></p>
+        `}
+      </div>
+    </div>
+
+    ${state.showSpectra ? `
+      <div style="margin-top:20px">
+        <div class="sub-title">Spectre simulé de ${esc(el.s)}</div>
+        ${spectrumChart(el.s)}
+      </div>
+    ` : ''}
+  `;
+}
+
+function spectrumChart(sym){
+  const info = SPECTRAL[sym];
+  const rgb = spectralRgb(sym);
+  const col = `rgb(${rgb.join(',')})`;
+
+  const W = 900, H = 260;
+  const padL = 48, padR = 22, padT = 22, padB = 48;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const wlMin = 380, wlMax = 780;
+  const x = wl => padL + (wl - wlMin) / (wlMax - wlMin) * plotW;
+  const y = v => padT + plotH - v * plotH;
+
+  let grid = '';
+  for (let wl = 400; wl <= 780; wl += 50){
+    grid += `<line x1="${x(wl)}" y1="${padT}" x2="${x(wl)}" y2="${padT+plotH}" stroke="#e2e8f0"/>`;
+    grid += `<text x="${x(wl)}" y="${H-padB+20}" text-anchor="middle" font-size="11" fill="#64748b">${wl}</text>`;
+  }
+  for (let v = 0; v <= 1.001; v += 0.25){
+    grid += `<line x1="${padL}" y1="${y(v)}" x2="${padL+plotW}" y2="${y(v)}" stroke="#eef2f8"/>`;
+    grid += `<text x="${padL-9}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#64748b">${v.toFixed(2)}</text>`;
+  }
+
+  // Construire la courbe
+  let d = '';
+  const N = 240;
+  for (let i = 0; i <= N; i++){
+    const wl = wlMin + (wlMax - wlMin) * i / N;
+    let v = 0;
+    if (info){
+      if (info.wl >= wlMin && info.wl <= wlMax)
+        v += 0.85 * Math.exp(-0.5 * Math.pow((wl - info.wl) / 14, 2));
+      (info.sec || []).forEach(s => {
+        if (s >= wlMin && s <= wlMax) v += 0.45 * Math.exp(-0.5 * Math.pow((wl - s) / 10, 2));
+      });
+    }
+    v = Math.min(1, v);
+    d += (i === 0 ? 'M' : 'L') + ` ${x(wl).toFixed(2)} ${y(v).toFixed(2)} `;
+  }
+  const fillPath = d + ` L ${x(wlMax).toFixed(2)} ${y(0).toFixed(2)} L ${x(wlMin).toFixed(2)} ${y(0).toFixed(2)} Z`;
+
+  let markers = '';
+  if (info){
+    if (info.wl >= wlMin && info.wl <= wlMax){
+      markers += `<line x1="${x(info.wl)}" y1="${padT}" x2="${x(info.wl)}" y2="${padT+plotH}" stroke="${col}" stroke-width="1" stroke-dasharray="4 3" opacity="0.55"/>`;
+      markers += `<circle cx="${x(info.wl)}" cy="${y(0.85)}" r="4" fill="${col}" stroke="#fff" stroke-width="1.5"/>`;
+      markers += `<text x="${x(info.wl)}" y="${padT+12}" text-anchor="middle" font-size="10" fill="#475569">${info.wl} nm</text>`;
+    }
+    (info.sec || []).forEach(s => {
+      if (s >= wlMin && s <= wlMax){
+        markers += `<circle cx="${x(s)}" cy="${y(0.45)}" r="3" fill="${col}" opacity="0.75" stroke="#fff" stroke-width="1"/>`;
+      }
+    });
+  }
+
+  return `
+    <div class="chart-box">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+        <rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH}" fill="url(#visibleSpectrum)" opacity="0.13"/>
+        ${grid}
+        <line x1="${padL}" y1="${padT+plotH}" x2="${padL+plotW}" y2="${padT+plotH}" stroke="#94a3b8" stroke-width="1.2"/>
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="#94a3b8" stroke-width="1.2"/>
+        <text x="${padL+plotW/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="#475569" font-weight="600">Longueur d'onde (nm)</text>
+        <text x="14" y="${padT+plotH/2}" text-anchor="middle" font-size="12" fill="#475569" font-weight="600" transform="rotate(-90 14 ${padT+plotH/2})">Intensité relative</text>
+        <path d="${fillPath}" fill="${col}" opacity="0.22"/>
+        <path d="${d}" fill="none" stroke="${col}" stroke-width="2.5"/>
+        ${markers}
+      </svg>
+    </div>`;
+}
+
+/* =========================================================================
+   6. RENDU GLOBAL
+   ========================================================================= */
+function render(){
+  renderSidebar();
+  renderMain();
+}
+
+document.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+</html>
