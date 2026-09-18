@@ -590,7 +590,15 @@ function renderSidebar(){
   `;
 
   sb.querySelectorAll('.nav-btn').forEach(b => {
-    b.onclick = () => { state.section = b.dataset.section; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+    b.onclick = () => {
+      state.section = b.dataset.section;
+      /* ✅ CORRECTIF : Forcer l'onglet "Par époque" par défaut pour les vues chronologiques */
+      if (state.section === 'Frise Chronologique' || state.section === 'Vue par Époque') {
+        state.spectralTab = 'epoque';
+      }
+      render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
   });
   sb.querySelectorAll('[data-epoch]').forEach(cb => {
     cb.onchange = () => {
@@ -628,10 +636,12 @@ function renderMain(){
     if (state.groupByEpoch) html += sectionEpochOverview();
   } else if (state.section === 'Frise Chronologique'){
     html += sectionTimeline();
-    html += sectionSpectral('epoque');
+    /* ✅ CORRECTIF : Utiliser l'onglet actif au lieu de 'epoque' codé en dur */
+    html += sectionSpectral(state.spectralTab);
   } else if (state.section === 'Vue par Époque'){
     html += sectionEpochOverview();
-    html += sectionSpectral('epoque');
+    /* ✅ CORRECTIF : Utiliser l'onglet actif au lieu de 'epoque' codé en dur */
+    html += sectionSpectral(state.spectralTab);
   } else if (state.section === 'Analyse Spectrale'){
     html += sectionSpectral(state.spectralTab);
     html += sectionExplorer();
